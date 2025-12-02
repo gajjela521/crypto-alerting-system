@@ -22,3 +22,13 @@ docker run -d --name kafka --network crypto-net -p 9092:9092 -p 29092:29092 \
   -e KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0 \
   -e CLUSTER_ID=ciWo7IWazngRchmPES6q5A== \
   confluentinc/cp-kafka:7.5.0
+
+# Start Prometheus
+docker run -d --name prometheus --network crypto-net -p 9090:9090 \
+  -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml \
+  prom/prometheus:v2.45.0
+
+# Start Grafana
+docker run -d --name grafana --network crypto-net -p 3000:3000 \
+  -e GF_SECURITY_ADMIN_PASSWORD=admin \
+  grafana/grafana:10.0.0

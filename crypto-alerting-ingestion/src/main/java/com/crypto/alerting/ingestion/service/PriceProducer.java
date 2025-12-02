@@ -9,19 +9,45 @@ import reactor.core.publisher.Mono;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderRecord;
 
+/**
+ * Service responsible for publishing price events to Kafka.
+ * Handles asynchronous message production with error handling and logging.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class PriceProducer {
+public final class PriceProducer {
 
     private final KafkaSender<String, PriceEvent> kafkaSender;
+
     private static final String TOPIC = "topic-raw-prices";
 
-    public Mono<Void> send(PriceEvent event) {
-        return kafkaSender
-                .send(Mono.just(
-                        SenderRecord.create(new ProducerRecord<>(TOPIC, event.getTicker(), event), event.getTicker())))
-                .doOnNext(r -> log.debug("Sent price event: {}", event))
-                .then();
+    /**
+     * Sends a price event to the Kafka topic.
+     * Uses the ticker symbol as the message key for partitioning.
+     *
+     * @param event the price event to send
+     * @return Mono that completes when the message is sent
+     */
+    public Mono<Void> send(final PriceEvent event) {
+        try {
+            if (event == null) {
+                log.warn("Attempted to send null price event");
+                return Mono.empty();
+            }
+
+            final String key = event.getTicker();
+            final ProducerRecord<String, PriceEvent> record = new ProducerRecord<>(TOPIC, key, event);
+            final SenderRecord<String, PriceEvent, String> senderRecord = SenderRecord.create(record, key);
+
+            return kafkaSender
+                    .send(Mono.just(senderRecord))
+                    .doOnNext(r -> log.debug("Sent price event: {}", event))
+                    .doOnError(e -> log.error("Failed to send price event: {}", event, e))
+                    .then();
+        } catch (final Exception e) {
+            log.error("Error creating Kafka sender record for event: {}", event, e);
+            return Mono.error(e);
+        }
     }
 }
