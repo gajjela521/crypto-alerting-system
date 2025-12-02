@@ -309,15 +309,17 @@
         <!-- Observability Section -->
         <div id="observability" class="section">
             <h1>Observability</h1>
-            <p style="margin-bottom: 20px;">Links to monitoring tools (requires local port forwarding).</p>
+            <p style="margin-bottom: 20px;">Monitoring tools (Available in Local Environment Only).</p>
             <div class="stats-grid">
-                <div class="card" onclick="window.open('http://localhost:9090', '_blank')" style="cursor: pointer;">
-                    <div class="card-title">Prometheus</div>
+                <div class="card" onclick="window.open('http://localhost:9090', '_blank')"
+                    style="cursor: pointer; opacity: 0.7;">
+                    <div class="card-title">Prometheus (Local)</div>
                     <div class="card-value" style="font-size: 1.2em; color: var(--primary);">Open Dashboard <i
                             class="fas fa-external-link-alt"></i></div>
                 </div>
-                <div class="card" onclick="window.open('http://localhost:3000', '_blank')" style="cursor: pointer;">
-                    <div class="card-title">Grafana</div>
+                <div class="card" onclick="window.open('http://localhost:3000', '_blank')"
+                    style="cursor: pointer; opacity: 0.7;">
+                    <div class="card-title">Grafana (Local)</div>
                     <div class="card-value" style="font-size: 1.2em; color: var(--primary);">Open Dashboard <i
                             class="fas fa-external-link-alt"></i></div>
                 </div>
@@ -329,8 +331,8 @@
             <h1>API Documentation</h1>
             <p style="margin-bottom: 20px;">Swagger UI for API exploration.</p>
             <div class="card">
-                <p>Access the full Swagger UI at: <a href="http://localhost:8080/webjars/swagger-ui/index.html"
-                        target="_blank">http://localhost:8080/webjars/swagger-ui/index.html</a></p>
+                <p>Access the full Swagger UI at: <a href="/webjars/swagger-ui/index.html"
+                        target="_blank">/webjars/swagger-ui/index.html</a></p>
             </div>
         </div>
 
