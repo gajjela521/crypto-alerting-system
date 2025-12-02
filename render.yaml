@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: crypto-alerting-ingestion
+    runtime: docker
+    plan: free
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: redis
+          property: port
+      # Kafka is optional for the live price stream demo.
+      # If you have an external Kafka provider, uncomment and set the following:
+      # - key: KAFKA_BOOTSTRAP_SERVERS
+      #   value: your-kafka-broker:9092
+
+  - type: redis
+    name: redis
+    plan: free
+    ipAllowList: [] # Allow internal connections only

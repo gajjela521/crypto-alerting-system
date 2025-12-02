@@ -45,6 +45,14 @@ docker compose up --build
 
 The service will be available at `http://localhost:8080/api/prices/stream`.
 
+### Render
+
+1.  Connect your GitHub repository to Render.
+2.  Render will automatically detect the `render.yaml` file.
+3.  It will deploy the **Ingestion Service** and a **Redis** instance.
+4.  Once deployed, the service will be available at your Render URL (e.g., `https://crypto-alerting-ingestion.onrender.com`).
+5.  Update the "Settings" in the dashboard to point to this URL.
+
 ### GitHub Actions
 
 Pushes to `main` trigger the CI/CD pipeline which builds the Docker image, pushes it to Docker Hub, and deploys the static UI to GitHub Pages.
