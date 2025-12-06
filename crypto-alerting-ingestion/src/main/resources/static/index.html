@@ -309,17 +309,15 @@
         <!-- Observability Section -->
         <div id="observability" class="section">
             <h1>Observability</h1>
-            <p style="margin-bottom: 20px;">Monitoring tools (Available in Local Environment Only).</p>
+            <p style="margin-bottom: 20px;">Monitoring and Logging.</p>
             <div class="stats-grid">
-                <div class="card" onclick="window.open('http://localhost:9090', '_blank')"
-                    style="cursor: pointer; opacity: 0.7;">
-                    <div class="card-title">Prometheus (Local)</div>
+                <div class="card" onclick="openObservabilityTool('prometheusUrl')" style="cursor: pointer;">
+                    <div class="card-title">Prometheus</div>
                     <div class="card-value" style="font-size: 1.2em; color: var(--primary);">Open Dashboard <i
                             class="fas fa-external-link-alt"></i></div>
                 </div>
-                <div class="card" onclick="window.open('http://localhost:3000', '_blank')"
-                    style="cursor: pointer; opacity: 0.7;">
-                    <div class="card-title">Grafana (Local)</div>
+                <div class="card" onclick="openObservabilityTool('grafanaUrl')" style="cursor: pointer;">
+                    <div class="card-title">Grafana</div>
                     <div class="card-value" style="font-size: 1.2em; color: var(--primary);">Open Dashboard <i
                             class="fas fa-external-link-alt"></i></div>
                 </div>
@@ -344,6 +342,14 @@
                     <label>Backend URL</label>
                     <input type="text" id="backendUrl" class="settings-input" value="http://localhost:8080">
                 </div>
+                <div class="settings-group">
+                    <label>Prometheus URL</label>
+                    <input type="text" id="prometheusUrl" class="settings-input" value="http://localhost:9090">
+                </div>
+                <div class="settings-group">
+                    <label>Grafana URL</label>
+                    <input type="text" id="grafanaUrl" class="settings-input" value="http://localhost:3000">
+                </div>
                 <button class="btn" onclick="saveSettings()">Save & Reconnect</button>
             </div>
         </div>
@@ -354,9 +360,14 @@
         let eventSource = null;
         let eventCount = 0;
         let backendUrl = localStorage.getItem('backendUrl') || 'http://localhost:8080';
+        let prometheusUrl = localStorage.getItem('prometheusUrl') || 'http://localhost:9090';
+        let grafanaUrl = localStorage.getItem('grafanaUrl') || 'http://localhost:3000';
 
         // Init
         document.getElementById('backendUrl').value = backendUrl;
+        document.getElementById('prometheusUrl').value = prometheusUrl;
+        document.getElementById('grafanaUrl').value = grafanaUrl;
+
         connectToStream();
         checkHealth();
 
@@ -369,10 +380,21 @@
             event.currentTarget.classList.add('active');
         }
 
+        function openObservabilityTool(key) {
+            const url = key === 'prometheusUrl' ? prometheusUrl : grafanaUrl;
+            window.open(url, '_blank');
+        }
+
         // Settings
         function saveSettings() {
             backendUrl = document.getElementById('backendUrl').value;
+            prometheusUrl = document.getElementById('prometheusUrl').value;
+            grafanaUrl = document.getElementById('grafanaUrl').value;
+
             localStorage.setItem('backendUrl', backendUrl);
+            localStorage.setItem('prometheusUrl', prometheusUrl);
+            localStorage.setItem('grafanaUrl', grafanaUrl);
+
             if (eventSource) eventSource.close();
             connectToStream();
             checkHealth();
