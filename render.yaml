@@ -28,25 +28,24 @@ services:
 
   - type: web
     name: prometheus
-    runtime: image
-    image: prom/prometheus:latest
+    runtime: docker
+    dockerfilePath: prometheus.Dockerfile
     plan: free
-    disk:
-      name: prometheus-data
-      mountPath: /prometheus
-      sizeGB: 1
+    # Disk validation error fix: Persistent disks are not available on the Free plan.
+    # To enable persistence, upgrade to a paid plan and uncomment the following:
+    # disk:
+    #   name: prometheus-data
+    #   mountPath: /prometheus
+    #   sizeGB: 1
     envVars:
+      # Config is now baked into the image via COPY in Dockerfile
       - key: ARGS
         value: "--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus"
-    # Note: Render requires a way to inject the config.
-    # For simplicity in this demo, we'll assume a custom Dockerfile or external config is used.
-    # However, to keep it simple without a custom image, we can try to mount the repo or use a simple workaround.
-    # A better approach for Render is to build a custom Prometheus image that includes the config.
 
   - type: web
     name: grafana
-    runtime: image
-    image: grafana/grafana:latest
+    runtime: docker
+    dockerfilePath: grafana.Dockerfile
     plan: free
     envVars:
       - key: GF_SECURITY_ADMIN_PASSWORD
