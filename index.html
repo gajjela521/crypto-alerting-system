@@ -359,7 +359,7 @@
         // State
         let eventSource = null;
         let eventCount = 0;
-        let backendUrl = localStorage.getItem('backendUrl') || 'http://localhost:8080';
+        let backendUrl = localStorage.getItem('backendUrl') || (window.location.hostname === 'localhost' ? 'http://localhost:8080' : window.location.origin);
         let prometheusUrl = localStorage.getItem('prometheusUrl') || 'http://localhost:9090';
         let grafanaUrl = localStorage.getItem('grafanaUrl') || 'http://localhost:3000';
 
