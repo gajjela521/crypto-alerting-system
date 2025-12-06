@@ -25,3 +25,31 @@ services:
     name: redis
     plan: free
     ipAllowList: [] # Allow internal connections only
+
+  - type: web
+    name: prometheus
+    runtime: image
+    image: prom/prometheus:latest
+    plan: free
+    disk:
+      name: prometheus-data
+      mountPath: /prometheus
+      sizeGB: 1
+    envVars:
+      - key: ARGS
+        value: "--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus"
+    # Note: Render requires a way to inject the config.
+    # For simplicity in this demo, we'll assume a custom Dockerfile or external config is used.
+    # However, to keep it simple without a custom image, we can try to mount the repo or use a simple workaround.
+    # A better approach for Render is to build a custom Prometheus image that includes the config.
+
+  - type: web
+    name: grafana
+    runtime: image
+    image: grafana/grafana:latest
+    plan: free
+    envVars:
+      - key: GF_SECURITY_ADMIN_PASSWORD
+        generateValue: true
+      - key: GF_INSTALL_PLUGINS
+        value: grafana-clock-panel,grafana-simple-json-datasource
