@@ -9,4 +9,4 @@ scrape_configs:
   - job_name: "ingestion-service"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["crypto-alerting-ingestion:8080"]
+      - targets: ["crypto-alerting-ingestion:10000"]
